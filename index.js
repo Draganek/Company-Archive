@@ -3,6 +3,7 @@ const express = require('express');
 const port = 3000;
 const path = require('path');
 const ejsLayouts = require('express-ejs-layouts');
+const { url } = require('inspector');
 const app = express();
 
 // view engine
@@ -18,7 +19,8 @@ app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.render('pages/home', {
-    title: 'Strona główna'
+    title: 'Strona główna',
+    url: req.url
   });
 });
 
@@ -29,19 +31,22 @@ app.get('/firmy/:name', (req, res) => {
     { slug: 'brukmode', name: 'Bruk Mode' },
   ];
 
+
   const company = companies.find(x => x.slug === name);
 
   res.render('pages/company', { 
     name: company?.name,
     companies,
-    title: company?.name ?? 'Brak wyników'
+    title: company?.name ?? 'Brak wyników',
+    url: req.url
   });
 });
 
 app.get('*', (req, res) => {
   res.render('errors/404', { 
     title: 'Nie znaleziono',
-    layout: 'layouts/minimalistic'
+    layout: 'layouts/minimalistic',
+    url: req.url
   });
 });
 
