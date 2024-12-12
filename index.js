@@ -8,7 +8,7 @@ const app = express();
 
 // view engine
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname + '/views'));
+app.set('views', path.join(__dirname, 'views'));
 // set layout
 app.use(ejsLayouts);
 app.set('layout', 'layouts/main');
