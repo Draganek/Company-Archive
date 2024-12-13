@@ -11,18 +11,18 @@ async function main() {
     const db = client.db(dbName);
     
     // companies
-    // await db
-    // .collection('companies')
-    // .insertOne({ slug: 'tworcastron', name: 'Tworca Stron.pl' });
+     await db
+    .collection('companies')
+    .insertOne({ slug: 'tworcastron', name: 'Tworca Stron.pl' });
 
     // const res = await db
-    //     .collection('companies')
-    //     .find({ slug: 'tworcastron' }).toArray();
+    //    .collection('companies')
+    //    .find({ slug: 'tworcastron' }).toArray();
 
     // console.log(res);
-    const collection = db.collection('companies');
+    // const collection = db.collection('companies');
 
-    await collection.deleteOne({ slug: 'tworcastron' });
+    // await collection.deleteOne({ slug: 'tworcastron' });
     
 }
 
