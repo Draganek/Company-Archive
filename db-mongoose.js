@@ -1,4 +1,5 @@
 const { mongoose } = require('mongoose');
+const { Schema } = require('schema')
 
 mongoose.connect('mongodb://localhost:27017/node-kurs');
 
@@ -9,12 +10,14 @@ const checkForbidenString = (value, forbidenString) => {
 }
 
 
-const Company = mongoose.model('Company', {
+const companySchema = new Schema({
     slug: {
         type: String,
         required: true,
         minLength: 3,
-        validate: value => checkForbidenString(value, 'slug')
+        validate: value => checkForbidenString(value, 'slug'),
+        trim: true,
+        lowercase: true
     },
     name: {
         type: String,
@@ -26,6 +29,8 @@ const Company = mongoose.model('Company', {
         min: 1
     }
 });
+
+const Company = mongoose.model('Company', companySchema);
 
 async function main() {
     const res = await Company.find({})
