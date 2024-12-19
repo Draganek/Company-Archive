@@ -1,10 +1,8 @@
-const chalk = require('chalk');
 const express = require('express');
-const port = 3000;
 const path = require('path');
 const ejsLayouts = require('express-ejs-layouts');
-const { url } = require('inspector');
 const app = express();
+
 
 // view engine
 app.set('view engine', 'ejs');
@@ -50,4 +48,4 @@ app.get('*', (req, res) => {
   });
 });
 
-app.listen(port);
+module.exports = app
