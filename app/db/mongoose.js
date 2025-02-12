@@ -1,9 +1,9 @@
-const { mongoose } = require('mongoose');
-const url = 'mongodb://localhost:27017/node-kurs';
+const mongoose = require('mongoose');
+const { database } = require('../config');
 
-mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
+mongoose.connect(database, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true
 });

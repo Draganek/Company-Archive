@@ -4,18 +4,18 @@ const ejsLayouts = require('express-ejs-layouts');
 const app = express();
 
 // init database
-require('./db/mongoose')
+require('./db/mongoose');
 
 // view engine
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname + '/../views'));
 // set layout
 app.use(ejsLayouts);
 app.set('layout', 'layouts/main');
-
-//public folder
+// public folder
 app.use(express.static('public'));
 
-app.use(require('./routes/web.js'))
+// mount routes
+app.use(require('./routes/web.js'));
 
-module.exports = app
+module.exports = app;
