@@ -1,5 +1,16 @@
+const Company = require('../db/models/company')
 
 class CompanyController {
+
+  async showCompanies(req, res) {
+    const companies = await Company.find({});
+
+    console.log(companies)
+    res.render('pages/companies', {
+      companies,
+      url: req.url
+    });
+  }
 
   showCompany(req, res) {
     console.log(req.url);
