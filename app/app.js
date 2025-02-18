@@ -15,6 +15,11 @@ app.set('layout', 'layouts/main');
 // public folder
 app.use(express.static('public'));
 
+app.use(express.urlencoded({ extended: true}))
+
+//middleware
+app.use(require('./middleware/view-variables.js'));
+
 // mount routes
 app.use(require('./routes/web.js'));
 

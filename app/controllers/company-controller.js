@@ -5,29 +5,69 @@ class CompanyController {
   async showCompanies(req, res) {
     const companies = await Company.find({});
 
-    console.log(companies)
-    res.render('pages/companies', {
+    res.render('pages/companies/companies', {
       companies,
-      url: req.url
     });
   }
 
-  showCompany(req, res) {
-    console.log(req.url);
+  async showCompany(req, res) {
     const { name } = req.params;
-    const companies = [
-      { slug: 'tworcastron', name: 'Tworca Stron.pl' },
-      { slug: 'brukmode', name: 'Bruk Mode' },
-    ];
+    
+    const company = await Company.findOne({ slug: name });
   
-    const company = companies.find(x => x.slug === name);
-  
-    res.render('pages/company', { 
+    res.render('pages/companies/company', { 
       name: company?.name,
-      companies,
       title: company?.name ?? 'Brak wyników',
-      url: req.url
     });
+  }
+
+  showCreateCompanyForm(req, res) {
+    res.render('pages/companies/create')
+  }
+
+  async createCompany(req, res) {
+    const company = new Company({
+      name: req.body.name,
+      slug: req.body.slug,
+      employeesCount: req.body.employeesCount || undefined, // linijka 32, company-controller.js
+    })
+    
+    try{
+      await company.save();
+      res.redirect('/firmy')
+    } catch (e) {
+      res.render('pages/companies/create', {
+        errors: e.errors,
+        form: req.body
+      })
+    }
+  }
+
+  async showEditCompanyForm(req, res) {
+    const { name } = req.params;
+    const company = await Company.findOne({ slug: name })
+    res.render('pages/companies/edit', {
+      form: company
+    })
+  }
+
+  async editCompany(req, res) {
+    const { name } = req.params;
+    const company = await Company.findOne({ slug: name })
+    company.name = req.body.name;
+    company.slug = req.body.slug;
+    company.employeesCount = req.body.employeesCount
+
+    try{
+      await company.save();
+      res.redirect('/firmy')
+    } catch (e) {
+      res.render('pages/companies/edit', {
+        errors: e.errors,
+        form: req.body
+      })
+    }
+    
   }
   
 }
