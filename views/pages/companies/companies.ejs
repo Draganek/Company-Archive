@@ -1,7 +1,28 @@
 <h1>Lista Firm:</h1>
 
-<ul>
-    <% companies.forEach(company => { %>
-      <li><a href="/firmy/<%= company.slug %>"><%= company.name %></a></li>
-    <% }); %>
-  </ul>
+<%- include('partials/search') %>
+
+<div class="row">
+  <div class="col-3">
+    <p>Sortuj wg</p>
+    <select name="sort" id="" class="form-control">
+      <option value="">Domyślnie</option>
+      <option value="name">A-z</option>
+      <option value="employeesCount">Pracowników</option>
+    </select>
+  </div>
+    <div class="col-9">
+      <% companies.forEach(company=> { %>
+        <div class="card bg-light mb-3">
+        <div class="card-body">
+          <p class="h3 mb-4>"> <%= company.name %></p>
+          <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
+          <a href="admin/firmy/<%= company.slug %>/edytuj" class="btn btn-warning">Edytuj</a>
+          <a href="admin/firmy/<%= company.slug %>/usun" 
+            onclick="return confirm('Czy jesteś pewny?')" 
+            class="btn btn-danger">Usuń</a>
+        </div>
+        </div>
+        <% }); %>
+  </div>
+</div>

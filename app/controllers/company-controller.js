@@ -3,7 +3,8 @@ const Company = require('../db/models/company')
 class CompanyController {
 
   async showCompanies(req, res) {
-    const companies = await Company.find({});
+    const { q } = req.query;
+    let companies = await Company.find({ name: { $regex: q, $options: 'i'} });
 
     res.render('pages/companies/companies', {
       companies,
@@ -68,6 +69,18 @@ class CompanyController {
       })
     }
     
+  }
+
+  async deleteCompany(req, res) {
+    const { name } = req.params;
+
+    try{
+       await Company.deleteOne({ slug: name});
+       res.redirect('/firmy');
+      }
+      catch(e) {
+
+    }
   }
   
 }
