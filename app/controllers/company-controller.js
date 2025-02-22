@@ -4,16 +4,16 @@ class CompanyController {
 
   async showCompanies(req, res) {
     const { q } = req.query;
+    
     let companies = await Company.find({ name: { $regex: q, $options: 'i'} });
 
     res.render('pages/companies/companies', {
-      companies,
+      companies, q
     });
   }
 
   async showCompany(req, res) {
     const { name } = req.params;
-    
     const company = await Company.findOne({ slug: name });
   
     res.render('pages/companies/company', { 
