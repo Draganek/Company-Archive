@@ -3,9 +3,24 @@ const Company = require('../db/models/company')
 class CompanyController {
 
   async showCompanies(req, res) {
-    const { q } = req.query;
-    
-    let companies = await Company.find({ name: { $regex: q, $options: 'i'} });
+    const { q, sort, countmin, countmax } = req.query;
+
+    const where = {};
+    if (q) {
+      where.name = { $regex: q, $options: 'i' };
+    }
+    if (countmin || countmax) {
+      where.employeesCount = {};
+      if (countmin) where.employeesCount.$gte = countmin;
+      if (countmax) where.employeesCount.$lte = countmax;
+    }
+
+    let query = Company.find(where);
+    if (sort) {
+      const s = sort.split('|')
+      query = query.sort({ [s[0]]: s[1] });
+    }
+    const companies = await query.exec();
 
     res.render('pages/companies/companies', {
       companies, q
@@ -15,8 +30,8 @@ class CompanyController {
   async showCompany(req, res) {
     const { name } = req.params;
     const company = await Company.findOne({ slug: name });
-  
-    res.render('pages/companies/company', { 
+
+    res.render('pages/companies/company', {
       name: company?.name,
       title: company?.name ?? 'Brak wyników',
     });
@@ -32,8 +47,8 @@ class CompanyController {
       slug: req.body.slug,
       employeesCount: req.body.employeesCount || undefined, // linijka 32, company-controller.js
     })
-    
-    try{
+
+    try {
       await company.save();
       res.redirect('/firmy')
     } catch (e) {
@@ -59,7 +74,7 @@ class CompanyController {
     company.slug = req.body.slug;
     company.employeesCount = req.body.employeesCount
 
-    try{
+    try {
       await company.save();
       res.redirect('/firmy')
     } catch (e) {
@@ -68,21 +83,21 @@ class CompanyController {
         form: req.body
       })
     }
-    
+
   }
 
   async deleteCompany(req, res) {
     const { name } = req.params;
 
-    try{
-       await Company.deleteOne({ slug: name});
-       res.redirect('/firmy');
-      }
-      catch(e) {
+    try {
+      await Company.deleteOne({ slug: name });
+      res.redirect('/firmy');
+    }
+    catch (e) {
 
     }
   }
-  
+
 }
 
 module.exports = new CompanyController();

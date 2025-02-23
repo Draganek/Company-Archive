@@ -1,33 +1,32 @@
 <h1>Lista Firm:</h1>
 
-<%- include('partials/search') %>
+<form>
+  <%- include('partials/search') %>
 
-  <div class="row">
-    <div class="col-3">
+    <div class="row">
+      <div class="col-3">
 
-      <form>
-        <label>Sortuj wg</label>
-        <select name="sort" id="" class="form-control">
-          <option value="">Domyślnie</option>
-          <option value="name">A-z</option>
-          <option value="employeesCount">Pracowników</option>
-        </select>
-      </form>
+        <%- include('partials/filters') %>
 
-    </div>
-    <div class="col-9">
-      <% companies.forEach(company=> { %>
-        <div class="card bg-light mb-3">
-          <div class="card-body">
-            <p class="h3 mb-4>">
-              <%= company.name %>
-            </p>
-            <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
-            <a href="admin/firmy/<%= company.slug %>/edytuj" class="btn btn-warning">Edytuj</a>
-            <a href="admin/firmy/<%= company.slug %>/usun" onclick="return confirm('Czy jesteś pewny?')"
-              class="btn btn-danger">Usuń</a>
+      </div>
+      <div class="col-9">
+        <% companies.forEach(company=> { %>
+          <div class="card bg-light mb-3">
+            <div class="card-body">
+              <p class="h3 mb-4>">
+                <%= company.name %>
+              </p>
+              <p>
+                Pracowników <%- company.employeesCount %>
+              </p>
+              <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
+              <a href="admin/firmy/<%= company.slug %>/edytuj" class="btn btn-warning">Edytuj</a>
+              <a href="admin/firmy/<%= company.slug %>/usun" onclick="return confirm('Czy jesteś pewny?')"
+                class="btn btn-danger">Usuń</a>
+            </div>
           </div>
-        </div>
-        <% }); %>
+          <% }); %>
+      </div>
     </div>
-  </div>
+
+</form>
