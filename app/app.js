@@ -30,7 +30,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 
 //middleware
-app.use(require('./middleware/view-variables.js'));
+app.use(require('./middleware/view-variables-middleware'));
+app.use(require('./middleware/user-middleware'));
+app.use('/admin', require('./middleware/is-auth-middleware'));
 
 // mount routes
 app.use(require('./routes/web.js'));

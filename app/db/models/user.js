@@ -28,6 +28,12 @@ userSchema.pre('save', function(next) {
     next();
 });
 
+userSchema.methods = {
+    comparePassword(password) {
+        return bcrypt.compareSync(password, this.password);
+    }
+}
+
 userSchema.post('save', function(error, doc, next) {
     if (error.code === 11000) {
         error.errors = { email: {message: 'Taki email jest już zajęty' }};

@@ -38,12 +38,24 @@ class UserController {
                 throw new Error("Incorrect password")
             }
 
+            //login
+            req.session.user = {
+                _id: user._id,
+                email: user.email
+            };
+            res.redirect('/')
+
         } catch (e) {
             res.render('pages/auth/login', {
                 form: req.body,
                 errors: true
             });
         }
+    }
+
+    logout(req, res) {
+        req,session.destroy();
+        res.redirect('/');
     }
 }
 
