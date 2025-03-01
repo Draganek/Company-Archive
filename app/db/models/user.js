@@ -16,7 +16,9 @@ const userSchema = new Schema({
         type: String,
         required: true,
         minLength: [4, 'Hasło powinno posiadać min. 4 znaki'],
-    }
+    },
+    firstName: String,
+    lastName: String
 });
 
 userSchema.pre('save', function(next) {
@@ -33,6 +35,10 @@ userSchema.methods = {
         return bcrypt.compareSync(password, this.password);
     }
 }
+
+userSchema.virtual('fullName').get(function() {
+    return `${this.firstName} ${this.lastName[0]}.`
+})
 
 userSchema.post('save', function(error, doc, next) {
     if (error.code === 11000) {

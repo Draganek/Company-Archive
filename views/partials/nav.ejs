@@ -23,6 +23,9 @@
         </li>
         <% } else { %>
           <li class="nav-item">
+            <a class="nav-link <%- url.includes('/zaloguj') ? 'active' : '' %>" href="/admin/profil">Profil</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/wyloguj">Wyloguj</a>
           </li>
           <% } %>
