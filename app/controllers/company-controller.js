@@ -1,4 +1,7 @@
 const Company = require('../db/models/company')
+const fs = require('fs');
+const { Parser } = require('json2csv');
+const { json } = require('stream/consumers');
 
 class CompanyController {
 
@@ -36,10 +39,10 @@ class CompanyController {
     const pagesCount = Math.ceil(resultsCount / perPage)
 
     res.render('pages/companies/companies', {
-      companies, 
-      q, 
-      page, 
-      pagesCount, 
+      companies,
+      q,
+      page,
+      pagesCount,
       resultsCount
     });
   }
@@ -92,7 +95,14 @@ class CompanyController {
     company.name = req.body.name;
     company.slug = req.body.slug;
     company.employeesCount = req.body.employeesCount;
-    company.image = req.file.filename;
+
+    if (req.file.filename && company.image) {
+      fs.unlinkSync('public/uploads/' + company.image)
+    }
+    if (req.file.filename) {
+      company.image = req.file.filename;
+    }
+
 
     try {
       await company.save();
@@ -108,14 +118,60 @@ class CompanyController {
 
   async deleteCompany(req, res) {
     const { name } = req.params;
+    const company = await Company.findOne({ slug: name });
 
     try {
+      if (company.image) {
+        fs.unlinkSync('public/uploads/' + company.image)
+      }
       await Company.deleteOne({ slug: name });
       res.redirect('/firmy');
     }
     catch (e) {
 
     }
+  }
+
+  async deleteImage(req, res) {
+    const { name } = req.params;
+    const company = await Company.findOne({ slug: name })
+    try {
+      fs.unlinkSync('public/uploads/' + company.image)
+      company.image = '';
+      await company.save();
+
+      res.redirect('/firmy');
+    }
+    catch (e) {
+
+    }
+  }
+
+  async getCSV(req,res) {
+    const fields = [
+      {
+        label: 'Nazwa',
+        value: 'slug'
+      },
+      {
+        label: 'URL',
+        value: 'slug'
+      },
+      {
+        label: 'Liczba pracowników',
+        value: 'employeesCount'
+      },
+    ];
+    
+    const data = await Company.find();
+    const fileName = 'companies.csv';
+
+    const json2csv = new Parser({ fields });
+    const csv = json2csv.parse(data);
+
+    res.header('Content-Type', 'text/csv');
+    res.attachment(fileName);
+    res.send(csv);
   }
 
 }

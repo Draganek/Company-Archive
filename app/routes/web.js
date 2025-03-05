@@ -3,19 +3,8 @@ const router = new express.Router();
 const CompanyController = require('../controllers/company-controller');
 const PageController = require('../controllers/page-controller');
 const UserController = require('../controllers/user-controller');
+const upload = require('../services/uploader')
 
-const path = require('path');
-const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: function(req, file, cb ) {
-        cb(null, 'public/uploads/');
-    },
-    filename: function(req, file, cb) {
-        const name = Date.now() + path.extname(file.originalname);
-        cb(null, name);
-    }
-})
-const upload = multer({ storage })
 
 
 router.get('/', PageController.showHome);
@@ -36,6 +25,9 @@ router.post('/admin/firmy/dodaj', upload.single('image'), CompanyController.crea
 router.get('/admin/firmy/:name/edytuj', CompanyController.showEditCompanyForm);
 router.post('/admin/firmy/:name/edytuj', upload.single('image'), CompanyController.editCompany);
 router.get('/admin/firmy/:name/usun', CompanyController.deleteCompany);
+router.get('/admin/firmy/:name/usun-zdjecie', CompanyController.deleteImage);
+
+router.get('/csv', CompanyController.getCSV)
 
 router.get('*', PageController.showNotFound);
 

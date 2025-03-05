@@ -14,8 +14,8 @@
     <% if (form.image) {%>
         <div class="row">
             <div class="col">
-                <img src="/uploads/<%- form.image %>" class="img-fluid" alt="">
-                <a href="#" class="btn btn-sm btn-danger">Usuń</a>
+                <img src="/uploads/<%- form.image %>" class="w-25" alt="">
+                <a href="/admin/firmy/<%- form.slug %>/usun-zdjecie" class="btn btn-lg btn-danger">Usuń</a>
             </div>
         </div>
     <% } %>
