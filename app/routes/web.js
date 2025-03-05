@@ -4,6 +4,19 @@ const CompanyController = require('../controllers/company-controller');
 const PageController = require('../controllers/page-controller');
 const UserController = require('../controllers/user-controller');
 
+const path = require('path');
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function(req, file, cb ) {
+        cb(null, 'public/uploads/');
+    },
+    filename: function(req, file, cb) {
+        const name = Date.now() + path.extname(file.originalname);
+        cb(null, name);
+    }
+})
+const upload = multer({ storage })
+
 
 router.get('/', PageController.showHome);
 router.get('/firmy', CompanyController.showCompanies);
@@ -19,9 +32,9 @@ router.get('/admin/profil', UserController.showProfile);
 router.post('/admin/profil', UserController.update);
 
 router.get('/admin/firmy/dodaj', CompanyController.showCreateCompanyForm);
-router.post('/admin/firmy/dodaj', CompanyController.createCompany);
+router.post('/admin/firmy/dodaj', upload.single('image'), CompanyController.createCompany);
 router.get('/admin/firmy/:name/edytuj', CompanyController.showEditCompanyForm);
-router.post('/admin/firmy/:name/edytuj', CompanyController.editCompany);
+router.post('/admin/firmy/:name/edytuj', upload.single('image'), CompanyController.editCompany);
 router.get('/admin/firmy/:name/usun', CompanyController.deleteCompany);
 
 router.get('*', PageController.showNotFound);

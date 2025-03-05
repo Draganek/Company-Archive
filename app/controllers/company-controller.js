@@ -63,7 +63,8 @@ class CompanyController {
       name: req.body.name,
       slug: req.body.slug,
       employeesCount: req.body.employeesCount || undefined, // linijka 32, company-controller.js
-      user: req.session.user._id
+      user: req.session.user._id,
+      image: req.file.filename
     })
 
     try {
@@ -90,7 +91,8 @@ class CompanyController {
     const company = await Company.findOne({ slug: name })
     company.name = req.body.name;
     company.slug = req.body.slug;
-    company.employeesCount = req.body.employeesCount
+    company.employeesCount = req.body.employeesCount;
+    company.image = req.file.filename;
 
     try {
       await company.save();
