@@ -35,6 +35,8 @@ app.use(require('./middleware/user-middleware'));
 app.use('/admin', require('./middleware/is-auth-middleware'));
 
 // mount routes
-app.use(require('./routes/web.js'));
+app.use('/api/', require('./routes/api'));
+app.use(require('./routes/web'));
+
 
 module.exports = app;
