@@ -13,7 +13,7 @@ class CompanyController {
             name: req.body.name,
             slug: req.body.slug,
             employeesCount: req.body.employeesCount || undefined, // linijka 32, company-controller.js
-            user: req.session.user._id,
+            user: req.user._id,
             image: req.file.filename
         })
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const { validateEmail } = require('../validators')
+const randomstring = require('randomstring')
 
 const userSchema = new Schema({
     email: {
@@ -18,7 +19,8 @@ const userSchema = new Schema({
         minLength: [4, 'Hasło powinno posiadać min. 4 znaki'],
     },
     firstName: String,
-    lastName: String
+    lastName: String,
+    apiToken: String
 });
 
 userSchema.pre('save', function(next) {
@@ -27,6 +29,14 @@ userSchema.pre('save', function(next) {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(user.password, salt);
     user.password = hash;
+    next();
+});
+
+userSchema.pre('save', function(next) {
+    const user = this;
+    if (user.isNew) {
+        user.apiToken = randomstring.generate(30);
+    }
     next();
 });
 
