@@ -47,7 +47,7 @@ userSchema.methods = {
 }
 
 userSchema.virtual('fullName').get(function() {
-    return `${this.firstName} ${this.lastName[0]}.`
+    return `${this.firstName || ''} ${this.lastName && this.lastName[0] || ''}.`
 })
 
 userSchema.post('save', function(error, doc, next) {
